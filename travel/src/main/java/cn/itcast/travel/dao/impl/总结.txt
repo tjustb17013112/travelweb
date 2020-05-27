@@ -1,0 +1,11 @@
+//1.定义sql语句
+String sql = "select * from tab_user where username=?";
+//2.执行sql,因为我们知道用户名查询只能查询出一个对象，所以我们用queryForObject，
+User user = template.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username);
+如果在数据库中查询，不存在user用户，那么 new BeanPropertyRowMapper<User>(User.class) 这步就不会发生
+不能封装，那么就不会返回null，所以就会报空指针异常
+
+抓取异常：Ctrl + Alt + T
+
+通过抓取异常后，将来 没有封装成功，user就没有被赋值，那么user还是最初的状态，即 null
+防止在查找的过程中出现异常，也是为save操作考虑
